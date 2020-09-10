@@ -26,7 +26,7 @@ http.createServer(function(request, response) {
 
     function send_file_content(file_content) {
         response.statusCode = 200;
-        response.setHeader('Content-Type', 'text/html');
+        //response.setHeader('Content-Type', 'text/html');
         response.end(file_content);
     }
 
