@@ -4,28 +4,18 @@ var fs = require('fs');
 http.createServer(function(request, response) {
     request.url = 'public_html'+ request.url;
     fs.stat(request.url, function(bad_url, url_stat) {
-        if (bad_url) send_404();
+        if (bad_url) respond(404);
         else {
             if (url_stat.isDirectory()) request.url += '/index.html';
-            fs.readFile(request.url, check_and_send_file);
+            fs.readFile(request.url, function(bad_filename, file_content) {
+                if (bad_filename) respond(404);
+                else respond(200, file_content)
+            });
         }
     });
         
-    function check_and_send_file(bad_filename, file_content) {
-        if (bad_filename) {
-            send_404();
-        } else {
-            send_file_content(file_content);
-        }
-    }
-
-    function send_404() {
-        response.statusCode = 404;
-        response.end();
-    }
-
-    function send_file_content(file_content) {
-        response.statusCode = 200;
+    function respond(http_status, file_content) {
+        response.statusCode = http_status;
         //response.setHeader('Content-Type', 'text/html');
         response.end(file_content);
     }
