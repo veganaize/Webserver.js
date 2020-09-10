@@ -2,12 +2,19 @@ var http = require('http');
 var fs = require('fs');
 
 http.createServer(function(request, response) {
-    request.url = 'public_html'+ request.url;
-    fs.stat(request.url, function(bad_url, url_stat) {
+    var prefixed_url = 'public_html'+ request.url;
+    fs.stat(prefixed_url, function(bad_url, url_stat) {
         if (bad_url) respond(404);
         else {
-            if (url_stat.isDirectory()) request.url += '/index.html';
-            fs.readFile(request.url, function(bad_filename, file_content) {
+            if (url_stat.isDirectory()) {
+                if (request.url.slice(-1) !== '/') {
+                    response.setHeader('Location', request.url +'/');
+                    respond(301);
+                }
+                
+                prefixed_url += '/index.html';
+            }
+            fs.readFile(prefixed_url, function(bad_filename, file_content) {
                 if (bad_filename) respond(404);
                 else respond(200, file_content)
             });
