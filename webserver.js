@@ -1,15 +1,15 @@
 var http = require('http');
 var fs = require('fs');
-//var template = require('./template');
+var template = require('./template');
 
 http.createServer(function(request, response) {
     
     determine_local_path(
     check_path(
     check_file(
-    //template.process_content(
+    template.process_content(
     respond
-    )))();
+    ))))();
 
     function determine_local_path(callback) {
         return function() {
