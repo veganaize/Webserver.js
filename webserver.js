@@ -25,7 +25,7 @@ http.createServer(function(request, response) {
                     respond(404);
                     return;
                 }
-            
+                
                 // apply trailing slash
                 if (url_stat.isDirectory() && local_path.slice(-1) !== '/') {
                     response.setHeader('Location', local_path.slice(11) +'/');
@@ -43,7 +43,7 @@ http.createServer(function(request, response) {
             if (local_path.slice(-1) === '/') {
                 local_path += 'index.html';
             }
-
+            
             fs.readFile(local_path, function(bad_file, file_content) {
                 if (bad_file) respond(404);
                 else callback(200, file_content, local_path);
